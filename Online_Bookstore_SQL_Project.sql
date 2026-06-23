@@ -55,7 +55,7 @@ FROM 'D:\DATA ANALYTICS BY ASHU\SQL Sheets\All Excel Practice Files\orders.csv'
 HEADER;
 
 
--- BASIC QUERIES
+-- QUERIES
 
 -- 1) Retrieve all books in the "Fiction" genre:
 
@@ -107,74 +107,3 @@ SELECT * FROM Books ORDER BY stock LIMIT 1;
 -- 11) Calculate the total revenue generated from all orders:
 
 SELECT SUM(total_amount) AS Revenue FROM Orders;
-
--- Advance Questions : 
-
-
--- 1) Retrieve the total number of books sold for each genre:
-
-SELECT b.genre, SUM(o.quantity) AS Total_Books_Sold
-FROM Orders o
-JOIN Books b ON o.book_id= b.book_id
-GROUP BY b.genre;
-
--- 2) Find the average price of books in the "Fantasy" genre:
-
-SELECT AVG (price) AS Average_price
-FROM Books
-WHERE Genre= 'Fantasy';
-
--- 3) List customers who have placed at least 2 orders:
-
-SELECT o.customer_id, c.name, COUNT(o.Order_id) AS Order_Count
-FROM Orders o
-JOIN Customers c ON o.customer_id=c.customer_id
-GROUP BY o.customer_id, c.name
-HAVING COUNT(order_id) >=2;
-
--- 4) Find the most frequently ordered book:
-
-SELECT o.Book_id, b.title, COUNT(o.order_id) AS Order_count
-FROM Orders o
-JOIN books b ON o.book_id=b.book_id
-GROUP BY o.Book_id, b.title
-ORDER BY Order_count DESC;
-
--- 5) Show the top 5 most expensive books of 'Fantasy' Genre :
-
-SELECT * FROM books
-WHERE genre= 'Fantasy'
-ORDER BY price DESC limit 5;
-
--- 6) Retrieve the total quantity of books sold by each author:
-
-SELECT b.author, SUM(o.quantity) AS Total_Books_Sold
-FROM ORDERS o
-JOIN books b ON o.book_id=b.book_id
-GROUP BY b.author;
-
--- 7) List the cities where customers who spent over $300 are located:
-
-SELECT DISTINCT c.city, total_amount
-FROM orders o
-JOIN customers c ON o.customer_id=c.customer_id
-WHERE o.total_amount> 300;
-
--- 8) Find the customer who spent the most on orders:
-
-SELECT c.customer_id, c.name, SUM(o.total_amount) AS Total_Spent
-FROM orders o
-JOIN customers c ON o.customer_id=c.customer_id
-GROUP BY c.customer_id, c.name
-ORDER BY Total_Spent DESC LIMIT 1;
-
---9) Calculate the stock remaining after fulfilling all orders:
-
-SELECT b.book_id, b.title, b.stock, COALESCE(SUM(quantity),0) AS Order_quantity,
-	b.stock -  COALESCE(SUM(quantity),0) AS Remaining_Quantity
-FROM books b
-LEFT JOIN orders o ON b.book_id=o.book_id
-GROUP BY b.book_id
-ORDER BY b.book_id;
-
-
